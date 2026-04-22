@@ -34,9 +34,3 @@ Kiểm tra Commit Message — Phải tuân thủ chuẩn Conventional Commits (v
 Kiểm tra Branch Name — Nhanh làm việc của bạn phải tuân thủ quy tắc dưới đây.
 
 Quy tắc đặt tên nhánh (Branch Naming Convention):
-Dành cho tất cả Dev members, nhánh của bạn phải được đặt tên theo cú pháp chứa email:
-feature/<your_discord_name>
-
-Ví dụ:
-
-feature/Kina
