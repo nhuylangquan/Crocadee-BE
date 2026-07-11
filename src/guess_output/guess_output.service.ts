@@ -5,9 +5,13 @@ import { createHash } from 'crypto';
 import { Question, Difficulty } from './guess_output.schema';
 
 export interface QuestionResponse {
+  id: string;
   q: string;
   o: { a: string; b: string; c: string; d: string };
-  c: number;
+}
+
+export interface ValidateResult {
+  correct: boolean;
   ex: string;
 }
 
@@ -69,10 +73,9 @@ export class QuestionsService {
     return selectedIndices.map((idx) => {
       const q = questions[idx];
       return {
+        id: q._id.toString(),
         q: q.q,
         o: q.o,
-        c: q.c,
-        ex: q.ex,
       };
     });
   }
@@ -108,11 +111,23 @@ export class QuestionsService {
     return selectedIndices.map((idx) => {
       const q = questions[idx];
       return {
+        id: q._id.toString(),
         q: q.q,
         o: q.o,
-        c: q.c,
-        ex: q.ex,
       };
     });
+  }
+
+  async validateAnswer(id: string, answer: number): Promise<ValidateResult> {
+    const question = await this.questionModel.findById(id).lean();
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+
+    const correct = question.c === answer;
+    return {
+      correct,
+      ex: question.ex,
+    };
   }
 }

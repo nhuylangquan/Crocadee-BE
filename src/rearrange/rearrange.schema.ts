@@ -8,6 +8,9 @@ export class RearrangeQuestion extends Document {
   @Prop({ required: true })
   q!: string;
 
+  @Prop({ required: true, type: [String] })
+  lines!: string[];
+
   @Prop({ required: true, enum: ['easy', 'medium', 'hard', 'nightmare'] })
   difficulty!: Difficulty;
 

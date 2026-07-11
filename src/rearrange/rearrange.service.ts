@@ -5,7 +5,13 @@ import { createHash } from 'crypto';
 import { RearrangeQuestion, Difficulty } from './rearrange.schema';
 
 export interface RearrangeQuestionResponse {
+  id: string;
   q: string;
+  lines: string[];
+}
+
+export interface ValidateRearrangeResult {
+  correct: boolean;
 }
 
 /**
@@ -30,6 +36,18 @@ function hexToSeed(hex: string): number {
     num = (num << 4) | parseInt(hex[i], 16);
   }
   return num;
+}
+
+/**
+ * Fisher-Yates shuffle using a seeded RNG.
+ */
+function seededShuffle<T>(arr: T[], rng: () => number): T[] {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
 }
 
 @Injectable()
@@ -64,10 +82,16 @@ export class RearrangeService {
 
     const questions = await this.rearrangeModel.find().lean();
 
+    // Use a separate seeded rng for shuffling lines within each question
+    const shuffleRng = mulberry32(numericSeed + 999);
+
     return selectedIndices.map((idx) => {
       const q = questions[idx];
+      const shuffled = seededShuffle(q.lines, shuffleRng);
       return {
+        id: q._id.toString(),
         q: q.q,
+        lines: shuffled,
       };
     });
   }
@@ -100,11 +124,31 @@ export class RearrangeService {
 
     const questions = await this.rearrangeModel.find({ difficulty }).lean();
 
+    const shuffleRng = mulberry32(numericSeed + 999);
+
     return selectedIndices.map((idx) => {
       const q = questions[idx];
+      const shuffled = seededShuffle(q.lines, shuffleRng);
       return {
+        id: q._id.toString(),
         q: q.q,
+        lines: shuffled,
       };
     });
+  }
+
+  async validateAnswer(
+    id: string,
+    userLines: string[],
+  ): Promise<ValidateRearrangeResult> {
+    const question = await this.rearrangeModel.findById(id).lean();
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+
+    const correct =
+      JSON.stringify(question.lines) === JSON.stringify(userLines);
+
+    return { correct };
   }
 }
