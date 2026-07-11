@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 // import { QuestionsService } from './questions.service';
-import { seedQuestions } from './questions.seed';
-import { Question } from './questions.schema';
+import { seedQuestions } from './guess_output.seed';
+import { Question } from './guess_output.schema';
 import { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 

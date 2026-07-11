@@ -1,4 +1,4 @@
-import { Difficulty } from './questions.schema';
+import { Difficulty } from './guess_output.schema';
 
 interface SeedQuestion {
   q: string;

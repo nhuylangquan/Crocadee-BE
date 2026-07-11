@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { createHash } from 'crypto';
-import { Question, Difficulty } from './questions.schema';
+import { Question, Difficulty } from './guess_output.schema';
 
 export interface QuestionResponse {
   q: string;

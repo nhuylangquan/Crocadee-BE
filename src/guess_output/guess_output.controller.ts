@@ -1,8 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { QuestionsService } from './questions.service';
+import { QuestionsService } from './guess_output.service';
 import { GetQuestionsDto } from './dto/get-questions.dto';
 
-@Controller('questions')
+@Controller('guess_output')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
