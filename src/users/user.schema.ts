@@ -20,6 +20,12 @@ export class User {
   @Prop({ required: true, select: false })
   password!: string;
 
+  @Prop({ select: false })
+  passwordResetToken?: string;
+
+  @Prop()
+  passwordResetExpires?: Date;
+
   createdAt?: Date;
 
   updatedAt?: Date;

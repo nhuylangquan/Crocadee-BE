@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DemoModule } from './demo/demo.module';
 import { AuthModule } from './auth/auth.module';
 import { QuestionsModule } from './guess_output/guess_output.module';
+import { LessonsModule } from './lessons/lessons.module';
+import { SandboxModule } from './sandbox/sandbox.module';
 import { RearrangeModule } from './rearrange/rearrange.module';
 import { AskAiModule } from './ask_ai/ask_ai.module';
 
@@ -22,6 +24,8 @@ import { AskAiModule } from './ask_ai/ask_ai.module';
     DemoModule,
     AuthModule,
     QuestionsModule,
+    LessonsModule,
+    SandboxModule,
     RearrangeModule,
     AskAiModule,
   ],
