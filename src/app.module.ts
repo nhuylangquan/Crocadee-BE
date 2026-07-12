@@ -5,9 +5,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DemoModule } from './demo/demo.module';
 import { AuthModule } from './auth/auth.module';
-import { QuestionsModule } from './questions/questions.module';
+import { QuestionsModule } from './guess_output/guess_output.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { SandboxModule } from './sandbox/sandbox.module';
+import { RearrangeModule } from './rearrange/rearrange.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SandboxModule } from './sandbox/sandbox.module';
     QuestionsModule,
     LessonsModule,
     SandboxModule,
+    RearrangeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

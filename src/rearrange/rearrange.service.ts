@@ -2,13 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { createHash } from 'crypto';
-import { Question, Difficulty } from './questions.schema';
+import { RearrangeQuestion, Difficulty } from './rearrange.schema';
 
-export interface QuestionResponse {
+export interface RearrangeQuestionResponse {
+  id: string;
   q: string;
-  o: { a: string; b: string; c: string; d: string };
-  c: number;
-  ex: string;
+  lines: string[];
+}
+
+export interface ValidateRearrangeResult {
+  correct: boolean;
 }
 
 /**
@@ -35,27 +38,40 @@ function hexToSeed(hex: string): number {
   return num;
 }
 
+/**
+ * Fisher-Yates shuffle using a seeded RNG.
+ */
+function seededShuffle<T>(arr: T[], rng: () => number): T[] {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 @Injectable()
-export class QuestionsService {
+export class RearrangeService {
   constructor(
-    @InjectModel(Question.name) private questionModel: Model<Question>,
+    @InjectModel(RearrangeQuestion.name)
+    private rearrangeModel: Model<RearrangeQuestion>,
   ) {}
 
-  async getQuestionsBySeed(seed?: string): Promise<QuestionResponse[]> {
-    const count = await this.questionModel.countDocuments();
+  async getQuestionsBySeed(
+    seed?: string,
+  ): Promise<RearrangeQuestionResponse[]> {
+    const count = await this.rearrangeModel.countDocuments();
     if (count === 0) {
-      throw new NotFoundException('No questions available');
+      throw new NotFoundException('No rearrange questions available');
     }
 
     const take = Math.min(15, count);
 
-    // If no seed provided, use random
     const seedStr = seed ?? Math.random().toString(36).substring(2, 15);
     const hash = createHash('md5').update(seedStr).digest('hex');
     const numericSeed = hexToSeed(hash);
     const rng = mulberry32(numericSeed);
 
-    // Fisher-Yates shuffle on indices using seeded RNG
     const indices = Array.from({ length: count }, (_, i) => i);
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(rng() * (i + 1));
@@ -64,15 +80,18 @@ export class QuestionsService {
 
     const selectedIndices = indices.slice(0, take).sort((a, b) => a - b);
 
-    const questions = await this.questionModel.find().lean();
+    const questions = await this.rearrangeModel.find().lean();
+
+    // Use a separate seeded rng for shuffling lines within each question
+    const shuffleRng = mulberry32(numericSeed + 999);
 
     return selectedIndices.map((idx) => {
       const q = questions[idx];
+      const shuffled = seededShuffle(q.lines, shuffleRng);
       return {
+        id: q._id.toString(),
         q: q.q,
-        o: q.o,
-        c: q.c,
-        ex: q.ex,
+        lines: shuffled,
       };
     });
   }
@@ -80,11 +99,11 @@ export class QuestionsService {
   async getQuestionsByDifficulty(
     difficulty: Difficulty,
     seed?: string,
-  ): Promise<QuestionResponse[]> {
-    const count = await this.questionModel.countDocuments({ difficulty });
+  ): Promise<RearrangeQuestionResponse[]> {
+    const count = await this.rearrangeModel.countDocuments({ difficulty });
     if (count === 0) {
       throw new NotFoundException(
-        `No questions found for difficulty: ${difficulty}`,
+        `No rearrange questions found for difficulty: ${difficulty}`,
       );
     }
 
@@ -103,16 +122,33 @@ export class QuestionsService {
 
     const selectedIndices = indices.slice(0, take).sort((a, b) => a - b);
 
-    const questions = await this.questionModel.find({ difficulty }).lean();
+    const questions = await this.rearrangeModel.find({ difficulty }).lean();
+
+    const shuffleRng = mulberry32(numericSeed + 999);
 
     return selectedIndices.map((idx) => {
       const q = questions[idx];
+      const shuffled = seededShuffle(q.lines, shuffleRng);
       return {
+        id: q._id.toString(),
         q: q.q,
-        o: q.o,
-        c: q.c,
-        ex: q.ex,
+        lines: shuffled,
       };
     });
+  }
+
+  async validateAnswer(
+    id: string,
+    userLines: string[],
+  ): Promise<ValidateRearrangeResult> {
+    const question = await this.rearrangeModel.findById(id).lean();
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+
+    const correct =
+      JSON.stringify(question.lines) === JSON.stringify(userLines);
+
+    return { correct };
   }
 }

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { QuestionsController } from './questions.controller';
-import { QuestionsService } from './questions.service';
-import { Question, QuestionSchema } from './questions.schema';
+import { QuestionsController } from './guess_output.controller';
+import { QuestionsService } from './guess_output.service';
+import { Question, QuestionSchema } from './guess_output.schema';
 
 @Module({
   imports: [
