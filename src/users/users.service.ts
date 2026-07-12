@@ -46,12 +46,61 @@ export class UsersService {
       .exec();
   }
 
+  async findByEmail(email: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ email: email.toLowerCase() }).exec();
+  }
+
+  async findByPasswordResetToken(token: string): Promise<UserDocument | null> {
+    return this.userModel
+      .findOne({
+        passwordResetToken: token,
+        passwordResetExpires: { $gt: new Date() },
+      })
+      .exec();
+  }
+
   async findByLogin(login: string): Promise<UserDocument | null> {
     return this.userModel
       .findOne({
         $or: [{ username: login }, { email: login.toLowerCase() }],
       })
       .select('+password')
+      .exec();
+  }
+
+  async setResetToken(
+    userId: string,
+    tokenHash: string,
+    expires: Date,
+  ): Promise<void> {
+    await this.userModel
+      .updateOne(
+        { _id: userId },
+        { passwordResetToken: tokenHash, passwordResetExpires: expires },
+      )
+      .exec();
+  }
+
+  async findByResetTokenHash(tokenHash: string): Promise<UserDocument | null> {
+    // passwordResetToken has `select: false`, so it must be explicitly re-selected
+    return this.userModel
+      .findOne({ passwordResetToken: tokenHash })
+      .select('+passwordResetToken')
+      .exec();
+  }
+
+  async updatePasswordAndClearResetToken(
+    userId: string,
+    hashedPassword: string,
+  ): Promise<void> {
+    await this.userModel
+      .updateOne(
+        { _id: userId },
+        {
+          password: hashedPassword,
+          $unset: { passwordResetToken: '', passwordResetExpires: '' },
+        },
+      )
       .exec();
   }
 
