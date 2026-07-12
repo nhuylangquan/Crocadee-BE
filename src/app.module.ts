@@ -7,6 +7,7 @@ import { DemoModule } from './demo/demo.module';
 import { AuthModule } from './auth/auth.module';
 import { QuestionsModule } from './guess_output/guess_output.module';
 import { RearrangeModule } from './rearrange/rearrange.module';
+import { AskAiModule } from './ask_ai/ask_ai.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { RearrangeModule } from './rearrange/rearrange.module';
     AuthModule,
     QuestionsModule,
     RearrangeModule,
+    AskAiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

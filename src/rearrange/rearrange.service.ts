@@ -12,6 +12,7 @@ export interface RearrangeQuestionResponse {
 
 export interface ValidateRearrangeResult {
   correct: boolean;
+  ex: string;
 }
 
 /**
@@ -149,6 +150,9 @@ export class RearrangeService {
     const correct =
       JSON.stringify(question.lines) === JSON.stringify(userLines);
 
-    return { correct };
+    return {
+      correct,
+      ex: question.ex ?? question.lines.join('\n'),
+    };
   }
 }

@@ -14,6 +14,9 @@ export class RearrangeQuestion extends Document {
   @Prop({ required: true, enum: ['easy', 'medium', 'hard', 'nightmare'] })
   difficulty!: Difficulty;
 
+  @Prop()
+  ex?: string;
+
   @Prop({ default: Date.now })
   createdAt!: Date;
 }
