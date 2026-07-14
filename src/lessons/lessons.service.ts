@@ -80,6 +80,15 @@ export class LessonsService {
         ],
         nextLessonId: 'basics',
         nextLessonName: 'C++ Basics',
+        codeFilename: 'hello_world.cpp',
+        code: `#include <iostream>
+
+int main() {
+    // This is your first C++ program
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}`,
+        output: '> Hello, World!',
       },
       {
         lessonId: 'basics',
@@ -92,6 +101,14 @@ export class LessonsService {
         nextLessonName: 'Variable',
         prevLessonId: 'intro',
         prevLessonName: 'Welcome to C++',
+        codeFilename: 'basics.cpp',
+        code: `#include <iostream>
+
+int main() {
+    std::cout << "Welcome to C++ Programming!" << std::endl;
+    return 0;
+}`,
+        output: '> Welcome to C++ Programming!',
       },
       {
         lessonId: 'variable',
@@ -104,6 +121,20 @@ export class LessonsService {
         nextLessonName: 'Condition',
         prevLessonId: 'basics',
         prevLessonName: 'C++ Basics',
+        codeFilename: 'variables.cpp',
+        code: `#include <iostream>
+#include <string>
+
+int main() {
+    int age = 20;
+    double score = 8.5;
+    std::string name = "Alex";
+    bool isPassed = true;
+
+    std::cout << "Name: " << name << ", Age: " << age << ", Score: " << score << std::endl;
+    return 0;
+}`,
+        output: '> Name: Alex, Age: 20, Score: 8.5',
       },
       {
         lessonId: 'condition',
@@ -116,6 +147,19 @@ export class LessonsService {
         nextLessonName: 'Loop',
         prevLessonId: 'variable',
         prevLessonName: 'Variable',
+        codeFilename: 'conditionals.cpp',
+        code: `#include <iostream>
+
+int main() {
+    int score = 8;
+    if (score >= 5) {
+        std::cout << "Passed" << std::endl;
+    } else {
+        std::cout << "Failed" << std::endl;
+    }
+    return 0;
+}`,
+        output: '> Passed',
       },
       {
         lessonId: 'loop',
@@ -128,6 +172,16 @@ export class LessonsService {
         nextLessonName: 'Function',
         prevLessonId: 'condition',
         prevLessonName: 'Condition',
+        codeFilename: 'loops.cpp',
+        code: `#include <iostream>
+
+int main() {
+    for (int i = 0; i < 3; i++) {
+        std::cout << "Iteration: " << i << std::endl;
+    }
+    return 0;
+}`,
+        output: '> Iteration: 0\nIteration: 1\nIteration: 2',
       },
       {
         lessonId: 'function',
@@ -140,6 +194,19 @@ export class LessonsService {
         nextLessonName: 'Array',
         prevLessonId: 'loop',
         prevLessonName: 'Loop',
+        codeFilename: 'functions.cpp',
+        code: `#include <iostream>
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int total = add(2, 3);
+    std::cout << "Total: " << total << std::endl;
+    return 0;
+}`,
+        output: '> Total: 5',
       },
       {
         lessonId: 'array',
@@ -152,6 +219,16 @@ export class LessonsService {
         nextLessonName: 'Pointer',
         prevLessonId: 'function',
         prevLessonName: 'Function',
+        codeFilename: 'arrays.cpp',
+        code: `#include <iostream>
+
+int main() {
+    int scores[3] = {8, 9, 10};
+    std::cout << "First score: " << scores[0] << std::endl;
+    std::cout << "Third score: " << scores[2] << std::endl;
+    return 0;
+}`,
+        output: '> First score: 8\nThird score: 10',
       },
       {
         lessonId: 'pointer',
@@ -162,6 +239,16 @@ export class LessonsService {
           'A pointer is a variable that stores the memory address of another variable as its value. A pointer variable points to a data type (like int) of the same type.',
         prevLessonId: 'array',
         prevLessonName: 'Array',
+        codeFilename: 'pointers.cpp',
+        code: `#include <iostream>
+
+int main() {
+    int number = 10;
+    int* numberPointer = &number;
+    std::cout << "Value: " << *numberPointer << std::endl;
+    return 0;
+}`,
+        output: '> Value: 10',
       },
     ];
 

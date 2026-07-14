@@ -53,6 +53,15 @@ export class Lesson extends Document {
 
   @Prop()
   prevLessonName?: string;
+
+  @Prop()
+  code?: string;
+
+  @Prop()
+  codeFilename?: string;
+
+  @Prop()
+  output?: string;
 }
 
 export const LessonSchema = SchemaFactory.createForClass(Lesson);

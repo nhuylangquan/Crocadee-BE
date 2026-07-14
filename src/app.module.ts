@@ -10,7 +10,7 @@ import { LessonsModule } from './lessons/lessons.module';
 import { SandboxModule } from './sandbox/sandbox.module';
 import { RearrangeModule } from './rearrange/rearrange.module';
 import { AskAiModule } from './ask_ai/ask_ai.module';
-
+import { ChatbotModule } from './chatbot/chatbot.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -28,6 +28,7 @@ import { AskAiModule } from './ask_ai/ask_ai.module';
     SandboxModule,
     RearrangeModule,
     AskAiModule,
+    ChatbotModule,
   ],
   controllers: [AppController],
   providers: [AppService],
