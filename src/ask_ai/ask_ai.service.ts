@@ -6,7 +6,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 export class AskAiService {
   private readonly logger = new Logger(AskAiService.name);
   private readonly genAI: GoogleGenerativeAI | null = null;
-  private readonly modelName = 'gemini-3.1-flash-lite';
+  private readonly modelName = 'gemini-2.0-flash-lite';
   private readonly systemPrompt = [
     '[ROLE]',
     'You are a dedicated and experienced AI Programming Tutor.',

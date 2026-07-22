@@ -19,7 +19,7 @@ export interface DebugResponse {
 export class ChatbotService {
   private readonly logger = new Logger(ChatbotService.name);
   private readonly genAI: GoogleGenerativeAI | null = null;
-  private readonly modelName = 'gemini-3.1-flash-lite';
+  private readonly modelName = 'gemini-2.0-flash-lite';
   private readonly systemInstruction = `
 [ROLE]
 Bạn là Trợ Lý Khái Niệm C++ (C++ Concept Assistant) - một gia sư lập trình AI vô cùng thân thiện, chu đáo và nhiệt tình.
